@@ -15,7 +15,7 @@
         :root {
             --google-blue: #1a73e8;
             --google-gray: #5f6368;
-            --sidebar-width: 380px;
+            --sidebar-width: 392px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -32,7 +32,6 @@
             position: fixed;
             top: 12px;
             left: 12px;
-            right: 12px;
             height: 48px;
             background: #fff;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
@@ -41,7 +40,7 @@
             align-items: center;
             padding: 0 12px;
             z-index: 2000;
-            max-width: 450px;
+            width: 380px;
         }
 
         .menu-btn {
@@ -64,51 +63,109 @@
             font-size: 16px;
         }
 
-        /* ============ LAYER CONTROL (NEW) ============ */
-        .layer-control {
+        /* ============ LAYER PANEL (GIỐNG HÌNH) ============ */
+        .layer-container {
             position: fixed;
             bottom: 24px;
             left: 24px;
             z-index: 1000;
-            cursor: pointer;
-            border: 2px solid #fff;
-            border-radius: 8px;
-            overflow: hidden;
-            width: 64px;
-            height: 64px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            transition: transform 0.2s;
-            background-size: cover;
-            /* Hình nền mặc định là vệ tinh để mô phỏng nút Lớp */
-            background-image: url('https://static1.makeuseofimages.com/wordpress/wp-content/uploads/2023/05/google-maps-icon-on-map.jpg');
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
         }
 
-        .layer-control:hover { transform: scale(1.05); }
+        .layer-main-btn {
+            width: 80px;
+            height: 80px;
+            border: 2px solid #000;
+            border-radius: 8px;
+            background-image: url('https://maps.gstatic.com/tactile/layers/layers-2x.png');
+            background-size: cover;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: flex-end;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        .layer-main-btn:hover { transform: scale(1.02); }
 
-        .layer-control .label {
-            position: absolute;
-            bottom: 0;
+        .layer-main-btn span {
+            background: rgba(255,255,255,0.9);
             width: 100%;
-            background: rgba(255, 255, 255, 0.9);
-            color: #202124;
-            font-size: 11px;
             text-align: center;
+            font-size: 12px;
             padding: 2px 0;
             font-weight: 500;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 2px;
+            color: #202124;
         }
 
-        .layer-control .material-icons-outlined { font-size: 14px; }
+        .layer-panel {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            gap: 16px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(10px);
+            transition: all 0.2s ease;
+            margin-left: 8px;
+        }
+
+        .layer-container:hover .layer-panel {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .layer-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            width: 64px;
+        }
+
+        .layer-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 8px;
+            border: 2px solid #e8eaed;
+            background-size: cover;
+            background-position: center;
+            transition: border-color 0.2s;
+        }
+
+        .img-terrain { background-image: url('https://maps.gstatic.com/tactile/layers/terrain-2x.png'); }
+        .img-traffic { background-image: url('https://maps.gstatic.com/tactile/layers/traffic-2x.png'); }
+        .img-transit { background-image: url('https://maps.gstatic.com/tactile/layers/transit-2x.png'); }
+        .img-bike { background-image: url('https://maps.gstatic.com/tactile/layers/bicycling-2x.png'); }
+        .img-more { background-image: url('https://maps.gstatic.com/tactile/layers/more-2x.png'); }
+
+        .layer-item.active .layer-icon {
+            border-color: #008b8b;
+            border-width: 3px;
+        }
+        .layer-item.active span {
+            color: #008b8b;
+            font-weight: 500;
+        }
+
+        .layer-item span {
+            font-size: 11px;
+            color: var(--google-gray);
+            text-align: center;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
 
         /* ============ SIDEBAR ============ */
         .sidebar {
             position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
+            top: 0; left: 0; bottom: 0;
             width: var(--sidebar-width);
             background: white;
             z-index: 2500;
@@ -122,79 +179,170 @@
         .sidebar.open { transform: translateX(0); }
 
         .sidebar-header {
-            padding: 24px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #e8eaed;
+            padding: 20px 16px 16px;
             position: relative;
         }
 
         .close-sidebar {
             position: absolute;
-            top: 16px;
-            right: 16px;
+            top: 12px;
+            right: 12px;
             cursor: pointer;
             color: var(--google-gray);
+            padding: 8px;
+            border-radius: 50%;
         }
+        .close-sidebar:hover { background: #f1f3f4; }
 
         .location-title {
             font-size: 22px;
-            font-weight: 500;
-            margin-bottom: 4px;
+            font-weight: 400;
             color: #202124;
+            margin-bottom: 2px;
         }
 
         .location-address {
             font-size: 14px;
-            color: var(--google-gray);
-            margin-bottom: 12px;
+            color: #70757a;
+            margin-bottom: 2px;
+        }
+
+        .location-coords {
+            font-size: 13px;
+            color: #70757a;
+            margin-bottom: 16px;
         }
 
         .btn-google-maps {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             background: var(--google-blue);
             color: white;
             border: none;
             border-radius: 24px;
+            font-size: 14px;
             font-weight: 500;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             cursor: pointer;
-            margin: 16px 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            margin-bottom: 8px;
+            transition: background 0.2s;
+        }
+        .btn-google-maps:hover { background: #1765cc; }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px;
+            border-top: 1px solid #e8eaed;
+            color: #3c4043;
+            font-size: 14px;
+        }
+
+        .history-header {
+            background: #f8f9fa;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #3c4043;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .empty-history {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #70757a;
+            padding-bottom: 80px;
+        }
+
+        .activity-log-footer {
+            border-top: 1px solid #e8eaed;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            color: #3c4043;
+            font-size: 14px;
         }
 
         .overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.1);
             z-index: 2400;
             display: none;
         }
 
         .overlay.active { display: block; }
 
-        #map {
-            width: 100%;
-            height: 100vh;
-            z-index: 1;
-        }
+        #map { width: 100%; height: 100vh; z-index: 1; }
 
-        .info-row {
+        /* ============ MAP CONTROLS (NEW) ============ */
+        .map-controls {
+            position: fixed;
+            bottom: 100px; /* Cách đáy 1 chút */
+            right: 12px;   /* Góc phải */
+            z-index: 1000;
             display: flex;
+            flex-direction: column;
             align-items: center;
             gap: 12px;
-            padding: 16px 24px;
-            border-bottom: 1px solid #f1f3f4;
-            color: var(--google-gray);
-            font-size: 14px;
+        }
+
+        .control-btn {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            transition: background-color 0.2s;
+        }
+        
+        .control-btn:hover {
+            background-color: #333;
+        }
+
+        .btn-location {
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            margin-bottom: 8px;
+        }
+
+        .zoom-group {
+            display: flex;
+            flex-direction: column;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            background-color: #000;
+        }
+
+        .btn-zoom-in {
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            height: 44px;
+        }
+        
+        .btn-zoom-out {
+            height: 44px;
         }
 
         @media (max-width: 480px) {
-            .header { right: 12px; max-width: none; }
-            .layer-control { bottom: 80px; } /* Tránh bị che bởi thanh công cụ mobile nếu có */
+            .sidebar { width: 100%; }
         }
     </style>
 </head>
@@ -205,14 +353,51 @@
         <button class="menu-btn" onclick="toggleSidebar()">
             <span class="material-icons-outlined">menu</span>
         </button>
-        <input type="text" class="search-input" placeholder="Tìm kiếm ở đây...">
-        <span class="material-icons-outlined" style="color:var(--google-gray)">search</span>
+        <input type="text" class="search-input" placeholder="Tìm kiếm trên Google Maps">
+        <span class="material-icons-outlined" style="color:var(--google-gray); cursor: pointer;">search</span>
     </div>
 
-    <div class="layer-control" id="layerBtn" onclick="toggleMapLayer()">
-        <div class="label">
-            <span class="material-icons-outlined">layers</span>
-            Lớp
+    <div class="layer-container">
+        <div class="layer-main-btn" onclick="toggleMapLayer()">
+            <span id="layerMainLabel">Vệ tinh</span>
+        </div>
+        
+        <div class="layer-panel">
+            <div class="layer-item" onclick="setLayer('terrain', this)">
+                <div class="layer-icon img-terrain"></div>
+                <span>Địa hình</span>
+            </div>
+            <div class="layer-item active" onclick="setLayer('traffic', this)">
+                <div class="layer-icon img-traffic"></div>
+                <span>Tình trạng giao thông</span>
+            </div>
+            <div class="layer-item" onclick="setLayer('transit', this)">
+                <div class="layer-icon img-transit"></div>
+                <span>Phương tiện công cộng</span>
+            </div>
+            <div class="layer-item" onclick="setLayer('bike', this)">
+                <div class="layer-icon img-bike"></div>
+                <span>Đi xe đạp</span>
+            </div>
+            <div class="layer-item">
+                <div class="layer-icon img-more"></div>
+                <span>Xem thêm</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="map-controls">
+        <button class="control-btn btn-location" onclick="getCurrentLocation()" title="Vị trí của tôi">
+            <span class="material-icons-outlined">my_location</span>
+        </button>
+        
+        <div class="zoom-group">
+            <button class="control-btn btn-zoom-in" onclick="map.zoomIn()" title="Phóng to">
+                <span class="material-icons-outlined">add</span>
+            </button>
+            <button class="control-btn btn-zoom-out" onclick="map.zoomOut()" title="Thu nhỏ">
+                <span class="material-icons-outlined">remove</span>
+            </button>
         </div>
     </div>
 
@@ -221,9 +406,9 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <span class="material-icons-outlined close-sidebar" onclick="toggleSidebar()">close</span>
-            <h1 class="location-title" id="locName">Phường Tân Đông Hiệp</h1>
-            <p class="location-address" id="locAddr">Dĩ An, Bình Dương, Việt Nam</p>
-            <p style="font-size: 12px; color: #9aa0a6;" id="locCoords">10.913507, 106.778114</p>
+            <h1 class="location-title">Phường Tân Đông Hiệp</h1>
+            <p class="location-address">Dĩ An, Bình Dương, Việt Nam</p>
+            <p class="location-coords">10.913507, 106.778114</p>
             
             <button class="btn-google-maps" onclick="openGMaps()">
                 <span class="material-icons-outlined">place</span>
@@ -232,24 +417,26 @@
         </div>
 
         <div class="info-row">
-            <span class="material-icons-outlined" style="color:#4285f4">schedule</span>
-            <span id="updateTime">Cập nhật: 1 phút trước</span>
+            <span class="material-icons-outlined" style="color:var(--google-blue)">access_time</span>
+            <span>Cập nhật: 1 phút trước</span>
         </div>
 
-        <div class="info-row" style="background: #f8f9fa;">
-            <span class="material-icons-outlined" style="color:#4285f4">history</span>
-            <span style="font-weight: 500; color: #202124; text-transform: uppercase; font-size: 12px;">Lịch sử vị trí gần đây</span>
+        <div class="history-header">
+            <span class="material-icons-outlined" style="color:var(--google-blue)">history</span>
+            <span>Lịch sử vị trí gần đây</span>
         </div>
         
-        <div style="flex:1; display:flex; align-items:center; justify-content:center; color:#bdc1c6; flex-direction:column;">
-            <span class="material-icons-outlined" style="font-size:48px;">location_off</span>
-            <p>Chưa có lịch sử vị trí</p>
+        <div class="empty-history">
+            <span class="material-icons-outlined" style="font-size: 64px; color: #e8eaed; margin-bottom: 12px;">location_off</span>
+            <p style="font-size: 14px;">Chưa có lịch sử vị trí</p>
         </div>
 
-        <div class="info-row" style="border-top: 1px solid #e8eaed; cursor: pointer;">
-            <span class="material-icons-outlined">description</span>
-            <span>Activity Log</span>
-            <span class="material-icons-outlined" style="margin-left: auto;">expand_more</span>
+        <div class="activity-log-footer">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <span class="material-icons-outlined">description</span>
+                <span>Activity Log</span>
+            </div>
+            <span class="material-icons-outlined">expand_more</span>
         </div>
     </aside>
 
@@ -257,64 +444,82 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // 1. Định nghĩa các loại lớp bản đồ
-        const streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap'
-        });
+        // Định nghĩa Layers
+        const streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' });
+        const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}');
 
-        const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EBP, and the GIS User Community'
-        });
-
-        // 2. Khởi tạo bản đồ với lớp mặc định
         const map = L.map('map', {
-            zoomControl: false,
-            layers: [streetLayer] // Mặc định hiện bản đồ đường phố
+            zoomControl: false, // Tắt zoom control mặc định của Leaflet để dùng custom
+            layers: [streetLayer]
         }).setView([10.913507, 106.778114], 15);
 
-        // Marker thiết bị
-        const marker = L.marker([10.913507, 106.778114]).addTo(map);
+        // Marker mặc định
+        const defaultMarker = L.marker([10.913507, 106.778114]).addTo(map);
 
-        // 3. Logic chuyển đổi lớp bản đồ
+        let userMarker = null;
+        let userCircle = null;
+
         let isSatellite = false;
         function toggleMapLayer() {
-            const btn = document.getElementById('layerBtn');
             if (!isSatellite) {
                 map.removeLayer(streetLayer);
                 map.addLayer(satelliteLayer);
-                // Đổi hình thumbnail nút thành bản đồ đường phố khi đang ở chế độ vệ tinh
-                btn.style.backgroundImage = "url('https://a.tile.openstreetmap.org/15/25442/18115.png')";
+                document.getElementById('layerMainLabel').innerText = "Bản đồ";
                 isSatellite = true;
             } else {
                 map.removeLayer(satelliteLayer);
                 map.addLayer(streetLayer);
-                // Đổi hình thumbnail nút thành vệ tinh khi đang ở chế độ đường phố
-                btn.style.backgroundImage = "url('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/15/18115/25442')";
+                document.getElementById('layerMainLabel').innerText = "Vệ tinh";
                 isSatellite = false;
             }
         }
 
-        // Hàm đóng mở Sidebar
+        function setLayer(type, element) {
+            document.querySelectorAll('.layer-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+            // Logic layer khác...
+        }
+
         function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('active');
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('active');
         }
 
-        // Hàm mở Google Maps
         function openGMaps() {
-            const lat = 10.913507;
-            const lng = 106.778114;
-            window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank');
+            window.open(`https://www.google.com/maps?q=10.913507,106.778114`, '_blank');
         }
 
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                document.getElementById('sidebar').classList.remove('open');
-                document.getElementById('overlay').classList.remove('active');
+        // --- CHỨC NĂNG ĐỊNH VỊ VỊ TRÍ HIỆN TẠI ---
+        function getCurrentLocation() {
+            if (!navigator.geolocation) {
+                alert("Trình duyệt của bạn không hỗ trợ định vị!");
+                return;
             }
+
+            // Sử dụng hàm locate của Leaflet để tìm vị trí
+            map.locate({setView: true, maxZoom: 16});
+        }
+
+        // Khi tìm thấy vị trí
+        map.on('locationfound', function(e) {
+            const radius = e.accuracy / 2;
+
+            // Xóa marker cũ nếu có
+            if (userMarker) map.removeLayer(userMarker);
+            if (userCircle) map.removeLayer(userCircle);
+
+            // Thêm marker mới
+            userMarker = L.marker(e.latlng).addTo(map)
+                .bindPopup("Bạn đang ở đây! (Độ chính xác: " + Math.round(radius) + "m)").openPopup();
+
+            userCircle = L.circle(e.latlng, radius).addTo(map);
         });
+
+        // Khi lỗi định vị
+        map.on('locationerror', function(e) {
+            alert("Không thể lấy vị trí hiện tại. Hãy kiểm tra cài đặt GPS.");
+        });
+
     </script>
 </body>
 </html>
