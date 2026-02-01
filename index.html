@@ -4,11 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPS Tracker - Pro Interface</title>
+    <title>GPS Tracker - Google Maps Style</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
-
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <style>
@@ -16,6 +15,7 @@
             --google-blue: #1a73e8;
             --google-gray: #5f6368;
             --sidebar-width: 392px;
+            --active-border: #13b5c8; /* Màu xanh teal giống trong hình */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -63,103 +63,131 @@
             font-size: 16px;
         }
 
-        /* ============ LAYER PANEL (GIỐNG HÌNH) ============ */
+        /* ============ LAYER PANEL (ĐÃ FIX) ============ */
         .layer-container {
             position: fixed;
             bottom: 24px;
             left: 24px;
             z-index: 1000;
             display: flex;
-            align-items: flex-end;
-            gap: 4px;
+            align-items: flex-end; /* Căn đáy */
+            /* Tạo vùng đệm vô hình để khi rê chuột từ nút sang panel không bị mất hover */
+            padding-right: 20px; 
+            padding-top: 20px;
         }
 
+        /* Nút Vệ Tinh Lớn */
         .layer-main-btn {
-            width: 80px;
-            height: 80px;
-            border: 2px solid #000;
+            width: 64px;
+            height: 64px;
             border-radius: 8px;
-            background-image: url('https://maps.gstatic.com/tactile/layers/layers-2x.png');
+            background-color: #fff;
+            background-image: url('6420546_cover.webp'); /* Hình vệ tinh chuẩn */
             background-size: cover;
             cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+            border: 2px solid white;
             display: flex;
-            align-items: flex-end;
-            overflow: hidden;
-            transition: transform 0.2s;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            position: relative;
+            z-index: 2; /* Nằm trên panel khi đóng */
         }
-        .layer-main-btn:hover { transform: scale(1.02); }
 
+        /* Chữ "Vệ tinh" đè lên nút */
         .layer-main-btn span {
-            background: rgba(255,255,255,0.9);
-            width: 100%;
-            text-align: center;
-            font-size: 12px;
-            padding: 2px 0;
+            color: white; /* Chữ trắng trên nền vệ tinh tối */
+            font-size: 11px;
             font-weight: 500;
-            color: #202124;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+            display: none; /* Mặc định ẩn cho gọn, hoặc hiện tùy ý */
+        }
+        
+        .layer-main-btn:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
 
+        /* Panel chứa các layer con */
         .layer-panel {
             background: white;
-            padding: 12px 16px;
-            border-radius: 12px;
+            padding: 16px;
+            border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             display: flex;
             gap: 16px;
+            
+            /* Hiệu ứng ẩn hiện */
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            margin-left: 74px; /* Cách nút chính ra */
             opacity: 0;
             visibility: hidden;
-            transform: translateX(10px);
-            transition: all 0.2s ease;
-            margin-left: 8px;
+            transform: scale(0.9);
+            transform-origin: bottom left;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
+        /* Khi hover vào container (cả vùng bao quanh) thì hiện panel */
         .layer-container:hover .layer-panel {
             opacity: 1;
             visibility: visible;
-            transform: translateX(0);
+            transform: scale(1);
+        }
+        
+        /* Highlight nút chính khi đang mở menu */
+        .layer-container:hover .layer-main-btn {
+            border-color: transparent; /* Ẩn viền trắng để trông liền mạch hơn */
         }
 
+        /* Các item con (Địa hình, Giao thông...) */
         .layer-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
             cursor: pointer;
-            width: 64px;
+            width: 56px;
         }
 
         .layer-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 8px;
-            border: 2px solid #e8eaed;
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            border: 2px solid #e8eaed; /* Viền xám mặc định */
             background-size: cover;
             background-position: center;
-            transition: border-color 0.2s;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
 
-        .img-terrain { background-image: url('https://maps.gstatic.com/tactile/layers/terrain-2x.png'); }
-        .img-traffic { background-image: url('https://maps.gstatic.com/tactile/layers/traffic-2x.png'); }
-        .img-transit { background-image: url('https://maps.gstatic.com/tactile/layers/transit-2x.png'); }
-        .img-bike { background-image: url('https://maps.gstatic.com/tactile/layers/bicycling-2x.png'); }
-        .img-more { background-image: url('https://maps.gstatic.com/tactile/layers/more-2x.png'); }
+        /* Các icon chuẩn Google */
+        .img-default { background-image: url('default.png'); } /* Mặc định */
+        .img-terrain { background-image: url('giaothong.png'); }
+       
 
+        .layer-item:hover .layer-icon {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Trạng thái ACTIVE (Quan trọng: Viền xanh) */
         .layer-item.active .layer-icon {
-            border-color: #008b8b;
-            border-width: 3px;
+            border-color: var(--active-border);
+            border-width: 2px;
+            box-shadow: 0 0 0 1px var(--active-border); /* Tạo hiệu ứng viền kép active */
         }
-        .layer-item.active span {
-            color: #008b8b;
-            font-weight: 500;
-        }
-
+        
         .layer-item span {
             font-size: 11px;
             color: var(--google-gray);
             text-align: center;
-            line-height: 1.2;
-            white-space: nowrap;
+            font-weight: 500;
+        }
+        
+        .layer-item.active span {
+            color: var(--active-border);
+            font-weight: 700;
         }
 
         /* ============ SIDEBAR ============ */
@@ -288,11 +316,11 @@
 
         #map { width: 100%; height: 100vh; z-index: 1; }
 
-        /* ============ MAP CONTROLS (NEW) ============ */
+        /* ============ MAP CONTROLS ============ */
         .map-controls {
             position: fixed;
-            bottom: 100px; /* Cách đáy 1 chút */
-            right: 12px;   /* Góc phải */
+            bottom: 100px;
+            right: 12px;
             z-index: 1000;
             display: flex;
             flex-direction: column;
@@ -301,45 +329,44 @@
         }
 
         .control-btn {
-            background-color: #000;
-            color: #fff;
+            background-color: #fff; /* Google dùng màu trắng cho nút location */
+            color: #666;
             border: none;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             transition: background-color 0.2s;
         }
         
-        .control-btn:hover {
-            background-color: #333;
-        }
+        .control-btn:hover { background-color: #f1f3f4; }
 
         .btn-location {
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            border-radius: 2px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.3);
             margin-bottom: 8px;
+            background: #fff;
         }
+        .btn-location .material-icons-outlined { color: #666; }
+        .btn-location:hover .material-icons-outlined { color: var(--google-blue); }
 
         .zoom-group {
             display: flex;
             flex-direction: column;
-            border-radius: 20px;
+            border-radius: 2px;
             overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            background-color: #000;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+            background-color: #fff;
         }
 
         .btn-zoom-in {
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            height: 44px;
+            border-bottom: 1px solid #e8eaed;
+            height: 40px;
         }
         
-        .btn-zoom-out {
-            height: 44px;
-        }
+        .btn-zoom-out { height: 40px; }
 
         @media (max-width: 480px) {
             .sidebar { width: 100%; }
@@ -358,34 +385,21 @@
     </div>
 
     <div class="layer-container">
-        <div class="layer-main-btn" onclick="toggleMapLayer()">
-            <span id="layerMainLabel">Vệ tinh</span>
-        </div>
+        <div class="layer-main-btn" onclick="toggleSatellite()" title="Chuyển chế độ Vệ tinh">
+            </div>
         
         <div class="layer-panel">
+            <div class="layer-item active" onclick="setLayer('default', this)">
+                <div class="layer-icon img-default"></div>
+                <span>Mặc định</span>
+            </div>
             <div class="layer-item" onclick="setLayer('terrain', this)">
                 <div class="layer-icon img-terrain"></div>
                 <span>Địa hình</span>
             </div>
-            <div class="layer-item active" onclick="setLayer('traffic', this)">
-                <div class="layer-icon img-traffic"></div>
-                <span>Tình trạng giao thông</span>
-            </div>
-            <div class="layer-item" onclick="setLayer('transit', this)">
-                <div class="layer-icon img-transit"></div>
-                <span>Phương tiện công cộng</span>
-            </div>
-            <div class="layer-item" onclick="setLayer('bike', this)">
-                <div class="layer-icon img-bike"></div>
-                <span>Đi xe đạp</span>
-            </div>
-            <div class="layer-item">
-                <div class="layer-icon img-more"></div>
-                <span>Xem thêm</span>
-            </div>
+
         </div>
     </div>
-
     <div class="map-controls">
         <button class="control-btn btn-location" onclick="getCurrentLocation()" title="Vị trí của tôi">
             <span class="material-icons-outlined">my_location</span>
@@ -444,40 +458,89 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Định nghĩa Layers
-        const streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' });
-        const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}');
+        // Định nghĩa các nguồn map
+        const streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+            attribution: '© OpenStreetMap' 
+        });
+        
+        const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri'
+        });
+
+        // Layer địa hình (Terrain) từ OpenTopoMap
+        const terrainLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenTopoMap'
+        });
 
         const map = L.map('map', {
-            zoomControl: false, // Tắt zoom control mặc định của Leaflet để dùng custom
+            zoomControl: false,
             layers: [streetLayer]
         }).setView([10.913507, 106.778114], 15);
 
-        // Marker mặc định
         const defaultMarker = L.marker([10.913507, 106.778114]).addTo(map);
 
         let userMarker = null;
         let userCircle = null;
-
         let isSatellite = false;
-        function toggleMapLayer() {
+
+        // Logic toggle Nút Vệ Tinh (Nút to)
+        function toggleSatellite() {
             if (!isSatellite) {
-                map.removeLayer(streetLayer);
+                // Bật vệ tinh
                 map.addLayer(satelliteLayer);
-                document.getElementById('layerMainLabel').innerText = "Bản đồ";
+                if(map.hasLayer(streetLayer)) map.removeLayer(streetLayer);
+                if(map.hasLayer(terrainLayer)) map.removeLayer(terrainLayer);
                 isSatellite = true;
+                // Highlight UI nếu cần
+                document.querySelector('.layer-main-btn').style.border = "2px solid #1a73e8";
             } else {
+                // Tắt vệ tinh -> Về layer đang chọn trong panel (mặc định là street)
                 map.removeLayer(satelliteLayer);
-                map.addLayer(streetLayer);
-                document.getElementById('layerMainLabel').innerText = "Vệ tinh";
+                
+                // Kiểm tra xem item nào đang active trong panel để restore lại
+                const activeItem = document.querySelector('.layer-item.active span').innerText;
+                if(activeItem === "Địa hình") {
+                    map.addLayer(terrainLayer);
+                } else {
+                    map.addLayer(streetLayer);
+                }
+                
                 isSatellite = false;
+                document.querySelector('.layer-main-btn').style.border = "2px solid white";
             }
         }
 
+        // Logic chọn layer con (Panel)
         function setLayer(type, element) {
+            // 1. Xử lý UI: Đổi active class
             document.querySelectorAll('.layer-item').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
-            // Logic layer khác...
+
+            // 2. Xử lý Logic Map
+            // Nếu đang ở chế độ vệ tinh thì tắt vệ tinh đi để hiện layer này
+            if (isSatellite) {
+                map.removeLayer(satelliteLayer);
+                isSatellite = false;
+                document.querySelector('.layer-main-btn').style.border = "2px solid white";
+            }
+
+            // Xóa hết các layer nền hiện tại
+            if (map.hasLayer(streetLayer)) map.removeLayer(streetLayer);
+            if (map.hasLayer(terrainLayer)) map.removeLayer(terrainLayer);
+
+            // Thêm layer mới dựa trên lựa chọn
+            switch (type) {
+                case 'terrain': // Địa hình
+                    map.addLayer(terrainLayer);
+                    break;
+                case 'traffic': // Giao thông (Leaflet free khó có traffic xịn, ta giữ streetLayer làm nền)
+                    map.addLayer(streetLayer);
+                    alert("Chế độ giao thông yêu cầu API key trả phí (Google/TomTom). Đang hiển thị bản đồ đường phố.");
+                    break;
+                default: // Mặc định, Transit, Bike... dùng bản đồ đường phố cơ bản
+                    map.addLayer(streetLayer);
+                    break;
+            }
         }
 
         function toggleSidebar() {
@@ -486,40 +549,29 @@
         }
 
         function openGMaps() {
-            window.open(`https://www.google.com/maps?q=10.913507,106.778114`, '_blank');
+            window.open(`https://www.google.com/maps/search/?api=1&query=10.913507,106.778114`, '_blank');
         }
 
-        // --- CHỨC NĂNG ĐỊNH VỊ VỊ TRÍ HIỆN TẠI ---
         function getCurrentLocation() {
             if (!navigator.geolocation) {
-                alert("Trình duyệt của bạn không hỗ trợ định vị!");
+                alert("Trình duyệt không hỗ trợ định vị!");
                 return;
             }
-
-            // Sử dụng hàm locate của Leaflet để tìm vị trí
             map.locate({setView: true, maxZoom: 16});
         }
 
-        // Khi tìm thấy vị trí
         map.on('locationfound', function(e) {
             const radius = e.accuracy / 2;
-
-            // Xóa marker cũ nếu có
             if (userMarker) map.removeLayer(userMarker);
             if (userCircle) map.removeLayer(userCircle);
-
-            // Thêm marker mới
             userMarker = L.marker(e.latlng).addTo(map)
-                .bindPopup("Bạn đang ở đây! (Độ chính xác: " + Math.round(radius) + "m)").openPopup();
-
+                .bindPopup("Bạn đang ở đây!").openPopup();
             userCircle = L.circle(e.latlng, radius).addTo(map);
         });
 
-        // Khi lỗi định vị
         map.on('locationerror', function(e) {
-            alert("Không thể lấy vị trí hiện tại. Hãy kiểm tra cài đặt GPS.");
+            alert("Không thể lấy vị trí. Vui lòng bật GPS.");
         });
-
     </script>
 </body>
 </html>
