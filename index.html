@@ -93,59 +93,14 @@
         }
 
         /* ========================================
-           BACK BUTTON (Top Left)
-           ======================================== */
-        .back-btn {
-            position: fixed;
-            top: 16px;
-            left: 16px;
-            z-index: 1001;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--surface);
-            color: var(--on-surface);
-            text-decoration: none;
-            padding: 10px 16px 10px 12px;
-            border-radius: var(--radius-full);
-            box-shadow: var(--shadow-md);
-            font-size: 14px;
-            font-weight: 500;
-            transition: all var(--transition);
-        }
-
-        .back-btn:hover {
-            background: var(--surface-variant);
-            box-shadow: var(--shadow-lg);
-            transform: translateX(-2px);
-        }
-
-        .back-btn:active {
-            transform: scale(0.98);
-        }
-
-        .back-btn .material-icons-round {
-            font-size: 20px;
-            color: var(--on-surface-variant);
-        }
-
-        /* ========================================
            FLOATING SEARCH BAR (Top Left)
            ======================================== */
         .search-container {
             position: fixed;
             top: 16px;
-            left: 140px;
+            left: 16px;
             z-index: 1000;
-            width: min(320px, calc(100% - 160px));
-        }
-
-        @media (max-width: 500px) {
-            .search-container {
-                left: 16px;
-                top: 70px;
-                width: calc(100% - 32px);
-            }
+            width: min(400px, calc(100% - 32px));
         }
 
         .search-bar {
@@ -702,17 +657,12 @@
     <!-- Map Container -->
     <div id="map"></div>
 
-    <!-- Back Button -->
-    <a href="index.html" class="back-btn" title="Quay lại trang chủ">
-        <span class="material-icons-round">arrow_back</span>
-        <span>Quay lại</span>
-    </a>
-
     <!-- Floating Search Bar -->
     <div class="search-container">
         <div class="search-bar">
-            <span class="material-icons-round"
-                style="color: var(--on-surface-variant); margin-right: 8px;">search</span>
+            <button class="menu-btn" id="menuBtn" title="Menu">
+                <span class="material-icons-round">menu</span>
+            </button>
             <input type="text" id="searchInput" placeholder="Tìm kiếm địa điểm..." autocomplete="off">
             <button class="voice-btn" title="Tìm bằng giọng nói">
                 <span class="material-icons-round">mic</span>
