@@ -23,6 +23,7 @@
       --brand: #606C38;
       /* Màu xanh nút */
       --ok: #606C38;
+      --danger: #dc2626;
       --radius: 18px;
     }
 
@@ -45,7 +46,7 @@
       /* Xếp dọc để Navbar ở trên */
     }
 
-    /* --- CSS CHO NAVBAR (Thêm mới) --- */
+    /* --- CSS CHO NAVBAR --- */
     .navbar {
       background-color: var(--card);
       padding: 15px 20px;
@@ -72,44 +73,6 @@
       display: flex;
       align-items: center;
       gap: 20px;
-    }
-
-    .search-box {
-      display: flex;
-      background: white;
-      border: 2px solid var(--text-muted);
-      border-radius: 30px;
-      /* Bo tròn kiểu viên thuốc */
-      padding: 2px 2px 2px 15px;
-      align-items: center;
-      width: 350px;
-      /* Độ rộng thanh tìm kiếm */
-    }
-
-    .search-box input {
-      border: none;
-      outline: none;
-      flex: 1;
-      padding: 8px;
-      font-size: 15px;
-      color: #333;
-    }
-
-    .search-btn {
-      background-color: var(--text-muted);
-      /* Màu xanh olive đậm */
-      color: var(--card);
-      border: none;
-      border-radius: 25px;
-      padding: 8px 25px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 14px;
-      transition: opacity 0.2s;
-    }
-
-    .search-btn:hover {
-      opacity: 0.9;
     }
 
     .menu-icon {
@@ -143,29 +106,24 @@
       font-size: 16px;
     }
 
-    /* Ẩn thanh tìm kiếm trên điện thoại cho gọn */
     @media (max-width: 600px) {
-      .search-box {
-        display: none;
-      }
-
       .nav-left span {
         font-size: 20px;
       }
     }
 
-    /* --- CSS CŨ CHO CARD --- */
+    /* --- CSS CHO CARD --- */
     .content-area {
       flex: 1;
-      /* Chiếm phần còn lại của màn hình */
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       padding: 16px;
+      overflow-y: auto;
     }
 
     .wrap {
-      width: min(720px, 100%);
+      width: min(800px, 100%);
     }
 
     .card {
@@ -190,43 +148,148 @@
       line-height: 1.5;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
+    /* --- CSS CHO DANH SÁCH LIÊN HỆ --- */
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    @media (min-width: 640px) {
-      .grid {
-        grid-template-columns: 1fr 1fr;
+    .contact-item {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+      padding: 16px;
+      background: rgba(96, 108, 56, 0.1);
+      border-radius: 12px;
+      border: 1px solid rgba(96, 108, 56, 0.2);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
-    .row {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    @media (max-width: 640px) {
+      .contact-item {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
     }
 
-    label {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text-main);
+    .contact-item .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .contact-item label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
     }
 
     .form-input {
       width: 100%;
-      padding: 14px;
-      border-radius: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
       outline: none;
       background: var(--input-bg);
       border: 2px solid #ddd;
       color: #000;
-      font-size: 18px;
+      font-size: 16px;
+      transition: border-color 0.2s;
     }
 
     .form-input:focus {
       border-color: var(--brand);
+    }
+
+    .form-input::placeholder {
+      color: #999;
+    }
+
+    /* Nút xóa */
+    .btn-remove {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border: none;
+      border-radius: 10px;
+      background: var(--danger);
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .btn-remove:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    .btn-remove:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* Nút thêm mới */
+    .btn-add {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px;
+      border: 2px dashed var(--brand);
+      border-radius: 12px;
+      background: transparent;
+      color: var(--brand);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .btn-add:hover {
+      background: var(--brand);
+      color: #fff;
+    }
+
+    .btn-add i {
+      font-size: 16px;
+    }
+
+    /* Số thứ tự */
+    .contact-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--brand);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      position: absolute;
+      top: -8px;
+      left: -8px;
+    }
+
+    .contact-item {
+      position: relative;
     }
 
     .actions {
@@ -243,11 +306,20 @@
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
-      transition: opacity 0.2s;
+      transition: opacity 0.2s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
     }
 
     .btn:active {
       opacity: 0.8;
+      transform: translateY(0);
     }
 
     .save {
@@ -271,6 +343,26 @@
       color: #fff;
       display: none;
       z-index: 99;
+      font-weight: 500;
+    }
+
+    /* Counter hiển thị số lượng */
+    .counter {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(96, 108, 56, 0.2);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-left: 12px;
+    }
+
+    .header-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
     }
   </style>
 </head>
@@ -283,10 +375,6 @@
       <span>GPS-TRACKING</span>
     </div>
     <div class="nav-right">
-      <div class="search-box">
-        <input type="text" placeholder="Tìm kiếm thiết bị...">
-        <button class="search-btn">TÌM</button>
-      </div>
       <a href="trackinggps.html" class="nav-btn">
         <i class="fa-solid fa-map-location-dot"></i>
         <span>Tracking GPS</span>
@@ -298,23 +386,49 @@
   <div class="content-area">
     <div class="wrap">
       <div class="card">
-        <div class="title">Thiết lập SOS</div>
-        <p class="hint">Mẹo: Nhập số điện thoại người thân để máy tự động gửi cầu cứu khi cần thiết.</p>
+        <div class="header-row">
+          <div class="title">Thiết lập SOS</div>
+          <span class="counter">
+            <i class="fa-solid fa-users"></i>
+            <span id="contactCount">1</span> liên hệ
+          </span>
+        </div>
+        <p class="hint">Mẹo: Nhập danh sách số điện thoại người thân để máy tự động gửi cầu cứu khi cần thiết. Bấm "Thêm
+          mới" để thêm nhiều người nhận.</p>
 
-        <div class="grid">
-          <div class="row">
-            <label>Số điện thoại</label>
-            <input id="phone" class="form-input" type="tel" inputmode="tel" placeholder="+84775316675" required>
-          </div>
-          <div class="row">
-            <label>Nội dung</label>
-            <input id="message" class="form-input" type="text" placeholder="HELP ME" maxlength="160" required>
+        <div class="contact-list" id="contactList">
+          <!-- Dòng đầu tiên -->
+          <div class="contact-item" data-index="0">
+            <span class="contact-number">1</span>
+            <div class="field">
+              <label>Số điện thoại</label>
+              <input class="form-input phone-input" type="tel" inputmode="tel" placeholder="+84775316675" required>
+            </div>
+            <div class="field">
+              <label>Lời nhắn</label>
+              <input class="form-input message-input" type="text" placeholder="HELP ME" maxlength="160" required>
+            </div>
+            <button class="btn-remove" title="Xóa" disabled>
+              <i class="fa-solid fa-trash"></i>
+            </button>
           </div>
         </div>
 
+        <!-- Nút thêm mới -->
+        <button class="btn-add" id="addBtn" style="margin-top: 16px;">
+          <i class="fa-solid fa-plus"></i>
+          Thêm mới
+        </button>
+
         <div class="actions">
-          <button class="btn save" id="saveBtn">💾 Lưu cài đặt</button>
-          <button class="btn send" id="sendBtn">✉️ Gửi thử</button>
+          <button class="btn save" id="saveBtn">
+            <i class="fa-solid fa-floppy-disk"></i>
+            Lưu cài đặt
+          </button>
+          <button class="btn send" id="sendBtn">
+            <i class="fa-solid fa-paper-plane"></i>
+            Gửi thử
+          </button>
         </div>
       </div>
     </div>
@@ -324,9 +438,10 @@
 
   <script>
     window.onload = function () {
-      const phoneEl = document.getElementById('phone');
-      const msgEl = document.getElementById('message');
+      const contactList = document.getElementById('contactList');
+      const addBtn = document.getElementById('addBtn');
       const toastEl = document.getElementById('toast');
+      const contactCountEl = document.getElementById('contactCount');
 
       // === GPS STATE ===
       let currentLat = null;
@@ -339,7 +454,7 @@
         toastEl.textContent = text;
         toastEl.style.backgroundColor = isOk ? '#16a34a' : '#ef4444';
         toastEl.style.display = 'block';
-        setTimeout(() => toastEl.style.display = 'none', 2000);
+        setTimeout(() => toastEl.style.display = 'none', 2500);
       }
 
       // === NORMALIZE PHONE ===
@@ -351,28 +466,148 @@
         return s;
       }
 
+      // === UPDATE CONTACT COUNT & NUMBERS ===
+      function updateContactNumbers() {
+        const items = contactList.querySelectorAll('.contact-item');
+        contactCountEl.textContent = items.length;
+
+        items.forEach((item, index) => {
+          item.dataset.index = index;
+          const numberSpan = item.querySelector('.contact-number');
+          if (numberSpan) {
+            numberSpan.textContent = index + 1;
+          }
+
+          // Enable/disable remove button (tối thiểu 1 dòng)
+          const removeBtn = item.querySelector('.btn-remove');
+          if (removeBtn) {
+            removeBtn.disabled = items.length <= 1;
+          }
+        });
+      }
+
+      // === ADD NEW CONTACT ROW ===
+      function addContactRow() {
+        const items = contactList.querySelectorAll('.contact-item');
+        const newIndex = items.length;
+
+        const newItem = document.createElement('div');
+        newItem.className = 'contact-item';
+        newItem.dataset.index = newIndex;
+        newItem.innerHTML = `
+          <span class="contact-number">${newIndex + 1}</span>
+          <div class="field">
+            <label>Số điện thoại</label>
+            <input class="form-input phone-input" type="tel" inputmode="tel" placeholder="+84775316675" required>
+          </div>
+          <div class="field">
+            <label>Lời nhắn</label>
+            <input class="form-input message-input" type="text" placeholder="HELP ME" maxlength="160" required>
+          </div>
+          <button class="btn-remove" title="Xóa">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        `;
+
+        contactList.appendChild(newItem);
+        updateContactNumbers();
+
+        // Focus vào input đầu tiên của dòng mới
+        newItem.querySelector('.phone-input').focus();
+      }
+
+      // === REMOVE CONTACT ROW ===
+      function removeContactRow(item) {
+        const items = contactList.querySelectorAll('.contact-item');
+        if (items.length <= 1) return;
+
+        item.style.animation = 'fadeIn 0.2s ease reverse';
+        setTimeout(() => {
+          item.remove();
+          updateContactNumbers();
+        }, 200);
+      }
+
+      // === GET ALL CONTACTS ===
+      function getAllContacts() {
+        const items = contactList.querySelectorAll('.contact-item');
+        const contacts = [];
+
+        items.forEach((item) => {
+          const phone = normalizePhone(item.querySelector('.phone-input').value);
+          const message = item.querySelector('.message-input').value.trim();
+
+          if (phone.length >= 10 && message) {
+            contacts.push({ phone, message });
+          }
+        });
+
+        return contacts;
+      }
+
+      // === VALIDATE CONTACTS ===
+      function validateContacts() {
+        const items = contactList.querySelectorAll('.contact-item');
+        let hasError = false;
+        let firstErrorInput = null;
+
+        items.forEach((item) => {
+          const phoneInput = item.querySelector('.phone-input');
+          const messageInput = item.querySelector('.message-input');
+          const phone = normalizePhone(phoneInput.value);
+          const message = messageInput.value.trim();
+
+          // Reset styles
+          phoneInput.style.borderColor = '#ddd';
+          messageInput.style.borderColor = '#ddd';
+
+          if (phone.length < 10) {
+            phoneInput.style.borderColor = '#ef4444';
+            if (!firstErrorInput) firstErrorInput = phoneInput;
+            hasError = true;
+          }
+          if (!message) {
+            messageInput.style.borderColor = '#ef4444';
+            if (!firstErrorInput) firstErrorInput = messageInput;
+            hasError = true;
+          }
+        });
+
+        if (hasError && firstErrorInput) {
+          firstErrorInput.focus();
+        }
+
+        return !hasError;
+      }
+
       // === SAVE ACTION (Gửi dữ liệu lên server) ===
       async function performSave() {
-        const phone = normalizePhone(phoneEl.value);
-        const message = msgEl.value.trim();
+        if (!validateContacts()) {
+          showToast('Vui lòng điền đầy đủ thông tin!', false);
+          return false;
+        }
 
-        if (phone.length < 10) return showToast('Số điện thoại không đúng', false);
-        if (!message) return showToast('Hãy nhập nội dung', false);
+        const contacts = getAllContacts();
+        if (contacts.length === 0) {
+          showToast('Không có liên hệ hợp lệ!', false);
+          return false;
+        }
 
         try {
-          const body = new URLSearchParams({
-            phone,
-            message,
+          const payload = {
+            contacts: contacts,
             lat: currentLat,
             lng: currentLng
-          }).toString();
+          };
 
-          const r = await fetch('/save', {
+          const r = await fetch('/save-contacts', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
           });
+
           if (!r.ok) throw new Error();
+          showToast(`Đã lưu ${contacts.length} liên hệ!`);
           return true;
         } catch (e) {
           showToast('Lỗi kết nối thiết bị', false);
@@ -382,23 +617,66 @@
 
       // === SEND ACTION ===
       async function handleSend() {
-        const phone = normalizePhone(phoneEl.value);
-        const message = msgEl.value.trim();
+        if (!validateContacts()) {
+          showToast('Vui lòng điền đầy đủ thông tin!', false);
+          return;
+        }
 
-        if (phone.length < 10) return showToast('Số điện thoại không đúng', false);
-        if (!message) return showToast('Hãy nhập nội dung', false);
+        const contacts = getAllContacts();
+        if (contacts.length === 0) {
+          showToast('Không có liên hệ hợp lệ!', false);
+          return;
+        }
 
         try {
-          const body = new URLSearchParams({ phone, message }).toString();
-          const r = await fetch('/send', {
+          const r = await fetch('/send-all', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contacts })
           });
+
           if (!r.ok) throw new Error();
-          showToast('Đã gửi tin nhắn!');
+          showToast(`Đang gửi SMS đến ${contacts.length} người!`);
         } catch (e) {
           showToast('Lỗi kết nối thiết bị', false);
+        }
+      }
+
+      // === LOAD SAVED CONTACTS ===
+      async function loadContacts() {
+        try {
+          const r = await fetch('/get-contacts');
+          if (!r.ok) return;
+
+          const data = await r.json();
+          if (!data.contacts || data.contacts.length === 0) return;
+
+          // Clear existing and add saved contacts
+          contactList.innerHTML = '';
+          data.contacts.forEach((contact, index) => {
+            const item = document.createElement('div');
+            item.className = 'contact-item';
+            item.dataset.index = index;
+            item.innerHTML = `
+              <span class="contact-number">${index + 1}</span>
+              <div class="field">
+                <label>Số điện thoại</label>
+                <input class="form-input phone-input" type="tel" inputmode="tel" placeholder="+84775316675" value="${contact.phone}" required>
+              </div>
+              <div class="field">
+                <label>Lời nhắn</label>
+                <input class="form-input message-input" type="text" placeholder="HELP ME" maxlength="160" value="${contact.message}" required>
+              </div>
+              <button class="btn-remove" title="Xóa">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            `;
+            contactList.appendChild(item);
+          });
+
+          updateContactNumbers();
+        } catch (e) {
+          console.log('No saved contacts found');
         }
       }
 
@@ -416,13 +694,11 @@
         };
 
         watchId = navigator.geolocation.watchPosition(
-          // Success callback
           async (position) => {
             currentLat = position.coords.latitude;
             currentLng = position.coords.longitude;
             console.log(`📍 GPS Updated: ${currentLat}, ${currentLng}`);
 
-            // Kiểm tra nếu đang chờ lưu
             if (isSavePending) {
               const success = await performSave();
               if (success) {
@@ -431,7 +707,6 @@
               isSavePending = false;
             }
           },
-          // Error callback
           (error) => {
             console.error('GPS Error:', error.message);
           },
@@ -441,26 +716,37 @@
 
       // === SAVE BUTTON CLICK HANDLER ===
       async function handleSaveClick() {
-        // Kiểm tra nếu đã có toạ độ
         if (currentLat !== null && currentLng !== null) {
-          const success = await performSave();
-          if (success) {
-            alert('Đã lưu!');
-          }
+          await performSave();
         } else {
-          // Chưa có toạ độ, đặt cờ chờ
           isSavePending = true;
-          alert('Đang đợi tín hiệu GPS...');
+          showToast('Đang đợi tín hiệu GPS...', true);
         }
       }
 
       // === EVENT LISTENERS ===
+      addBtn.onclick = addContactRow;
+
+      contactList.addEventListener('click', (e) => {
+        const removeBtn = e.target.closest('.btn-remove');
+        if (removeBtn && !removeBtn.disabled) {
+          const item = removeBtn.closest('.contact-item');
+          removeContactRow(item);
+        }
+      });
+
       document.getElementById('saveBtn').onclick = handleSaveClick;
       document.getElementById('sendBtn').onclick = handleSend;
 
       // === INIT ===
       initGeolocation();
-      setTimeout(() => phoneEl.focus(), 500);
+      loadContacts();
+
+      // Focus vào input đầu tiên
+      setTimeout(() => {
+        const firstInput = contactList.querySelector('.phone-input');
+        if (firstInput) firstInput.focus();
+      }, 500);
     };
   </script>
 
